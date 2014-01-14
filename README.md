@@ -1,4 +1,4 @@
 demo
 ====
 
-demo
+1.lazyclass
