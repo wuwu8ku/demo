@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<title>视觉效果demo</title>
+<style>
+*{margin:0;padding:0;}
+.demo{height:400px;border-bottom:1px solid #ddd;padding:50px;transition:background-color .5s ease-in .1s;background-color:#ffffff;}
+.blue{background-color:#0066FF;}
+.red{background-color:#FF3300;}
+.green{background-color:#009933;}
+.purple{background-color:#6633FF;}
+.gray{background-color:#999999;}
+.yellow{background-color:#CCCC00;}
+.demo span{margin-left:0px;transition:margin-left .5s ease-in .1s;}
+.demo a{margin-left:300px;transition:margin-left .5s ease-in .1s;}
+.blue span,.red span,.green span,.purple span,.gray span,.yellow span{margin-left:300px;}
+.blue a,.red a,.green a,.purple a,.gray a,.yellow a{margin-left:0px;}
+</style>
+</head>
+<body>
+<div id="demo1" class="demo" data-classname="blue"><span>demo1</span></div>
+<div id="demo2" class="demo" data-classname="red"><a>demo2</a></div>
+<div id="demo3" class="demo" data-classname="green"><span>demo3</span></div>
+<div id="demo4" class="demo" data-classname="purple"><a>demo4</a></div>
+<div id="demo5" class="demo" data-classname="gray"><span>demo5</span></div>
+<div id="demo6" class="demo" data-classname="yellow"><a>demo6</a></div>
+<script src="lazyclass.js"></script>
+<script>
+window.onload = function(){
+	var lazy = new LazyClass(document.getElementsByTagName('div'));
+}
+</script>
+</body>
+</html>
