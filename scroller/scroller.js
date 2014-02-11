@@ -1,28 +1,9 @@
-var LazyClass = function(options) {
+var Scroller = function(options) {
     this._init(options);
 	this._bindHandler();
     this._doLoad();
 };
-LazyClass.prototype = {
-	_extendJson: function() {
-		arguments[0] = arguments[0] || {};
-		for (var i = 1, len = arguments.length; i < len; i++) {
-			for (var para in arguments[i]) {
-				arguments[0][para] = arguments[i][para]
-			}
-		}
-		return arguments[0]
-	},
-	_trim: function(o, str) {
-		var reg;
-		if (str) {
-			str = str.replace(/([\.\+\?\*\\\^\&\[\]\(\)\{\}\$\,])/g, '\\$1');
-			reg = new RegExp("^(" + str + ")+|(" + str + ")+$", "g")
-		} else {
-			reg = /^\s+|\s+$/g
-		}
-		return o.replace(reg, "")
-	},
+Scroller.prototype = {
 	_removeEventHandler: function(oTarget, sEventType, fnHandler) {
 		if (oTarget.listeners && oTarget.listeners[sEventType]) {
 			var listeners = oTarget.listeners[sEventType];
@@ -56,33 +37,80 @@ LazyClass.prototype = {
 			Function.prototype.bind = function(){var __method = this;var args = Array.prototype.slice.call(arguments);var object=args.shift();return function(){return __method.apply(object,args.concat(Array.prototype.slice.call(arguments)));}}
 		}
 		var elems = options.elems || options;
-		this.repeat = options.repeat || false;
-		this.options = [];
+		var scroller = options.scroller;
+		this.options = [];	
+		this.index = -1;
 		this.lock = false;
+		this.click = false;
 		this.timer = null;
-		this.range = {
-			top:0,
-			bottom: window.innerHeight || Math.max(document.documentElement.clientHeight, document.body.clientHeight)
-		};
+		this.range = window.innerHeight || Math.max(document.documentElement.clientHeight, document.body.clientHeight);
 		for(var i=0,l=elems.length;i<l;i++){
 			var elem = elems[i],
-				className = elem.dataset ? elem.dataset['classname'] : elem.getAttribute('data-classname');
-			if(className){
-				this.options.push({elem: elem, className: className, loaded: false});
+				index = elem.dataset ? elem.dataset['scroller'] : elem.getAttribute('data-scroller');
+			index = parseInt(index);
+			if(index!=-1 && scroller[index]){
+				this.options.push({elem: elem, index: index});
 			}
 		}
+		this.scroller = scroller;
+		this.current = options.current;
 	},
 	_bindHandler: function() {
 		if(this.options.length){
 			this._addEventHandler(window, "scroll", this._doLoad.bind(this));
 			this._addEventHandler(window, "resize", this._resizeload.bind(this));
 		}
+		var scroller = this.scroller;
+		var clickScroller = function(e){
+			e = e || window.event;
+			var target = e.target || e.srcElement;
+			if(target.nodeName == 'A'){
+				target = target.parentNode;
+			}
+			var index = parseInt(target.dataset ? target.dataset['scroller'] : target.getAttribute('data-scroller'));
+			if(this.index == index){
+				return;
+			}
+			var options = this.options;
+			var distance = 0;
+			for(var i=0,l=options.length;i<l;i++){
+				if(options[i]['index'] == index){
+					distance = this._getRect(options[i]['elem']).top;
+					break;
+				}
+			}
+			if(distance){
+				this.click = true;
+				var last = this.scroller[this.index];
+				if(last){
+					last.className = last.className.replace(this.current, '');
+				}
+				this.scroller[index].className += ' '+ this.current;
+				this.index = index;
+				
+				var timer = setInterval(function(){
+					var d = Math.ceil( distance * 0.2 );
+					window.scrollBy(0, d);
+					
+					if(d == 0){
+						clearInterval(timer);
+						this.click = false;
+					}
+					distance = distance - d;
+				}.bind(this),15)
+			}
+			
+		}
+		for(var i=0,l=scroller.length;i<l;i++){
+			this._addEventHandler(scroller[i], 'click', clickScroller.bind(this))
+		}
 	},
 	_resizeload: function() {
-		this.range.bottom = window.innerHeight || Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+		this.range = window.innerHeight || Math.max(document.documentElement.clientHeight, document.body.clientHeight);
 		this._doLoad();
 	},
 	_doLoad: function() {
+		if(this.click)return;
 		var _this = this;
 		if (!this.lock) {
 			this.lock = true;
@@ -98,31 +126,37 @@ LazyClass.prototype = {
 	_loadRun: function() {
 		var options = this.options;
 		if (options.length) {
+			var index = -1,
+				percentage = 0;
 			for (var i = 0, l = options.length; i < l; i++) {
 				var op = options[i];
-				if(!this.repeat && op.loaded){
-					continue;
-				}
+
 				var	elem = op['elem'],
 					rect = this._getRect(elem),
 					range = this.range;
-				if(rect.bottom <= range.top){
+				if(rect.bottom <= 0 || rect.top >= range){
 					continue;
 				}
-				if(rect.top >= range.bottom){
-					if(op.loaded){
-						elem.className = elem.className.replace(op.className, '');
-						op.loaded = false;
-					}
-					continue;
+				if((rect.top<=0 && rect.bottom>=range)||(rect.top>=0 && rect.bottom<=range)){			
+					index = op['index'];
+					break;
 				}
 				var height = rect.bottom-rect.top;
-				if(!op.loaded){
-					if((rect.top<=0 && (rect.bottom-range.top)/height >= 0.3) || (rect.top>0 && (range.bottom-rect.top)/height >= 0.3)){
-						elem.className += ' '+ op.className;
-						op.loaded = true;
-					}
+				var perc = rect.top<0 ? rect.bottom/height : (range-rect.top)/height;
+				if(percentage){
+					index = perc > percentage ? op['index'] : options[i-1]['index'];
+					break;
+				}else{
+					percentage = perc;
 				}
+			}
+			if(this.index != index){
+				var last = this.scroller[this.index];
+				if(last){
+					last.className = last.className.replace(this.current, '');
+				}
+				this.scroller[index].className += ' '+ this.current;
+				this.index = index;
 			}
 		}
 		this.lock = false;

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>拖动滑块选择范围的网页插件代码</title>
+<style>
+.slider {
+	height: 19px;
+	width: 600px;
+	background-color: #eee;
+	border: 2px solid #EAE6DD;
+	margin: 10px 0;
+	z-index: 2;
+}
+.ui-slider-handle {
+	height: 15px;
+	width: 10px;
+	border: 2px outset buttonhighlight;
+	background-color: #D4D0C8;
+	_font-size: 0;
+	z-index: 2;
+}
+.ui-slider-range{
+	position: absolute;
+	z-index: 1;
+	font-size: .7em;
+	display: block;
+	border: 0;
+	background-color: #333;
+	top: 0;
+	height: 100%;
+}
+</style>
+</head>
+<body>
+<div id="idSlider" class="slider" tabindex="-1">
+</div>
+<script src='slider.js'></script>
+<script>
+var sld = new Slider("idSlider", {
+	MaxValue:5,
+	Values:[3,4],
+	Step: 1,
+	Ease:true,
+	//onMin: function(){ $$("idCurrentState").innerHTML = "到达开始值"; },
+	//onMax: function(){ $$("idCurrentState").innerHTML = "到达结束值"; },
+	//onMid: function(){ $$("idCurrentState").innerHTML = "滑动中"; },
+	onMove: function(){
+		console.log(this.GetValue(),this.GetPercent())
+	}
+});
+/*
+$$("txtMin").onchange = function(){ sld3.MinValue = parseInt($$("txtMin").value, 10); }
+$$("txtMax").onchange = function(){ sld3.MaxValue = parseInt($$("txtMax").value, 10); }
+
+$$("txtMin").onchange();
+$$("txtMax").onchange();
+
+sld3.onMove();
+
+$$("btnMoveV").onclick = function(){ sld3.SetValue(parseInt($$("txtMove").value, 10)); }
+$$("btnMoveP").onclick = function(){ sld3.SetPercent(parseInt($$("txtMove").value, 10) / 100); }
+
+$$("btnEase").onclick = function(){
+	if(sld3.Ease){
+	sld3.Ease = false;
+	this.value = "设置缓动";
+	}else{
+	sld3.Ease = true;
+	this.value = "取消缓动";
+	}
+}
+*/
+</script>
+</body>
+</html>

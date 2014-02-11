@@ -30,7 +30,9 @@
 <script src="lazyclass.js"></script>
 <script>
 window.onload = function(){
-	var lazy = new LazyClass(document.getElementsByTagName('div'));
+	var lazy = new LazyClass({
+		elems:document.getElementsByTagName('div')
+	});
 }
 </script>
 </body>
