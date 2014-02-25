@@ -12,8 +12,8 @@ require.config({
 		// '*' means all modules will get 'jquery-private'
 		// for their 'jquery' dependency.
 		'*': {
-			'jquery': 'jquery-private' ,
-			'bye': 'mod/bye.1.0.0'
+			'jquery': 'jquery-private'
+			//,'bye': 'mod/bye.1.0.0'
 		},
 
 		// 'jquery-private' wants the real jQuery module
@@ -27,7 +27,7 @@ require.config({
    console.log($);
 }); */
 
-require(['mod/hello', 'bye'], function(hello, bye) {
+require(['mod/hello', 'mod/bye'], function(hello, bye) {
    hello();
    bye();
 });
