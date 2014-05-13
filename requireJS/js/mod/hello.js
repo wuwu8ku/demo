@@ -1,6 +1,6 @@
-define(['jquery'], function($){
+define(['mod/store'], function(store){
 	var hello = function(){
-		$('#demo').append('<p>hello</p>');
+		store.add();
 	}
 	return hello;
 })

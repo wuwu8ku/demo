@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style>
+*{margin:0px;padding:0px;}
+.guest{
+	width:1050px;
+	padding-left:150px;
+	margin:0 auto;
+	position:relative;
+}
+.guest_b{
+	background-position:-300px -360px;
+}
+.guest_c{
+	background-position:-300px -760px;
+}
+.guest .list{
+	width:1020px;
+	height:390px;
+	overflow:hidden;
+	position:relative;
+}
+.guest .list ul{
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+.guest li{
+	width:300px;
+	height:355px;
+	overflow:hidden;
+	padding:0 20px;
+	float:left;
+	position:relative;
+}
+.guest li a{
+	display:block;
+	width:200px;
+	height:200px;
+	margin:0 auto;
+	overflow:hidden;
+}
+.guest li img{
+	width:200px;
+	height:200px;
+	-moz-transition:border-radius .1s ease-in;
+	-webkit-transition:border-radius .1s ease-in;
+	-o-transition:border-radius .1s ease-in;
+	-ms-transition:border-radius .1s ease-in;
+	transition:border-radius .1s ease-in;
+	border-radius:50%;
+}
+.guest li a:hover img{
+	border-radius:10px;
+}
+.guest li div{
+	text-align:center;
+	line-height:24px;
+	height:48px;
+	margin:25px 0 10px;
+	font-weight:600;
+}
+.guest li div span{
+	font-weight:200;
+	margin-left:10px;
+}
+.guest li p{
+	line-height:24px;
+}
+.guest li p a{
+	display:inline;
+	width:inherit;
+	height:inherit;
+	margin:0;
+	overflow:auto;
+	color:#898972;
+	text-decoration:none;
+	position:relative;
+}
+.guest .pre,.guest .next{
+	display:block;
+	width:60px;
+	height:117px;
+	background:url(img/arror_pics.png) no-repeat 0 0;
+	position:absolute;
+	left:130px;
+	top:50px;
+	cursor:pointer;
+}
+.guest .next{
+	background-position:-60px 0px;
+	left:1130px;
+}
+</style>
+</head>
+<body>
+<div class="guest">
+	<div class="list">
+		<ul id="guestListA" style="width: 1360px; left: 0px;">
+			<li>
+				<a href="javascript:void(0);"><img src="img/zhaohq.jpg"/></a>
+				<div>赵汗青<span>京东商城UED高级经理</span><br>《体验的发生》</div>
+				<p>现任京东（JD.COM）产品体验设计高级经理。祖籍北京，毕业于清华大学美术学院。产品设计与体验领域的关注者…<a href="javascript:void(0);"><span>【更多】</span></a></p>
+			</li>
+			<li>
+				<a href="javascript:void(0);"><img src="img/lij.jpg"/></a>
+				<div>李嘉<span>SAP UX Design Expert</span><br>用户体验设计项目管理的经验与思考</div>
+				<p>2003年入行用户体验, 2004年共同创建 UPA中国。十年来,在交互设计,用户研究到设计管理等各领域积累了丰富经验…<a href="javascript:void(0);"><span>【更多】</span></a></p>
+			</li>
+			<li>
+				<a href="javascript:void(0);"><img src="img/liuxf.jpg"/></a>
+				<div>刘轩飞<span>猪八戒网无线团队负责人</span><br>建立以产品为中心的高效无线研发团队</div>
+				<p>多年互联网和软件产品设计和管理经验，从2011年起专注于移动互联网领域，目前负责猪八戒网无线团队。</p>
+			</li>
+			<li>
+				<a href="javascript:void(0);"><img src="img/xiawc.jpg"/></a>
+				<div>夏文超<span>携程无线WXD高级交互设计师</span><br>移动端为场景而设计</div>
+				<p>他做过用研，交互以及交互设计团队负责人，并配合惠普美国和新加坡的设计部门，改进设计与RD的流程，参与研究产品设计创新…<a href="javascript:void(0);"><span>【更多】</span></a></p>
+			</li>
+		</ul>
+	</div>
+	<span id="btnPreA" class="pre" style="display: none;"></span>
+	<span id="btnNextA" class="next" style="display: block;"></span>
+</div>
+<script src="jquery.min.js"></script>
+<script src='list.js'></script>
+<script>
+var guestListA = new scrollPicture({
+	btnPrev: document.getElementById('btnPreA'),
+	btnNext: document.getElementById('btnNextA'),
+	objBox: document.getElementById('guestListA'),
+	showLen: 3,
+	width: 340
+})
+</script>
+</body>
+</html>

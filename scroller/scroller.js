@@ -54,6 +54,7 @@ Scroller.prototype = {
 		}
 		this.scroller = scroller;
 		this.current = options.current;
+		this.revise = options.revise || 0;
 	},
 	_bindHandler: function() {
 		if(this.options.length){
@@ -75,7 +76,7 @@ Scroller.prototype = {
 			var distance = 0;
 			for(var i=0,l=options.length;i<l;i++){
 				if(options[i]['index'] == index){
-					distance = this._getRect(options[i]['elem']).top;
+					distance = this._getRect(options[i]['elem']).top + this.revise;
 					break;
 				}
 			}
@@ -99,9 +100,13 @@ Scroller.prototype = {
 					distance = distance - d;
 				}.bind(this),15)
 			}
-			
+			if (e.preventDefault){
+				e.preventDefault(); 
+			}else{
+				e.returnValue = false; 
+			}
 		}
-		for(var i=0,l=scroller.length;i<l;i++){
+		for(var i=0,l=this.options.length;i<l;i++){
 			this._addEventHandler(scroller[i], 'click', clickScroller.bind(this))
 		}
 	},
@@ -147,10 +152,11 @@ Scroller.prototype = {
 					index = perc > percentage ? op['index'] : options[i-1]['index'];
 					break;
 				}else{
+					index = op['index'];
 					percentage = perc;
 				}
 			}
-			if(this.index != index){
+			if(this.index != index && index != -1){
 				var last = this.scroller[this.index];
 				if(last){
 					last.className = last.className.replace(this.current, '');

@@ -27,7 +27,11 @@ require.config({
    console.log($);
 }); */
 
-require(['mod/hello', 'mod/bye'], function(hello, bye) {
-   hello();
-   bye();
+require(['mod/hello', 'mod/bye', 'mod/store'], function(hello, bye,store) {
+	hello();
+	console.log(store.index);
+	hello();
+	console.log(store.index);
+	bye();
+	console.log(store.index);
 });

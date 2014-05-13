@@ -1,6 +1,5 @@
-define(['jquery'], function($){
-	function bye(){
-		$('#demo').append('<p>bye</p>');
+define(['jquery','mod/store'], function($,store){
+	return function(){
+		store.remove();
 	}
-	return bye;
 })
